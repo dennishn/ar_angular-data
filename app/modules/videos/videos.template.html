@@ -1,0 +1,22 @@
+<div class="row">
+
+    <div class="small-12 medium-9 columns">
+        <ul class="small-block-grid-2 medium-block-grid-5">
+            <li ng-repeat="video in videos.videos">
+                <h4><a ui-sref="videos, {id: video._id.$oid}">{{video.title}}</a></h4>
+                <p>{{video.length}}</p>
+                <ul class="inline-list">
+                    <li ng-repeat="tag in video.tags"><small>{{tag}}</small></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="small-12 medium-3 columns">
+        <ul class="side-nav">
+            <li>
+                <button ng-click="videos.create()">Create</button>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -34,9 +34,15 @@
                         /*
                             2: Return the data from the resolved promise (Loads view more slowly, but has data on-load)
                         */
-                        return Videos.query().$promise.then(function(results) {
-                            return results;
+                        return Videos.findAll({}).then(function(result) {
+                            return result;
                         });
+                        //Videos.query().$promise.then(function(results) {
+                        //    console.log(results);
+                        //})
+                        //return Videos.query().$promise.then(function(results) {
+                        //    return results;
+                        //});
                     }
                 }
             };

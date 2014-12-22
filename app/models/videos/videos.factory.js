@@ -13,13 +13,13 @@
         .factory('Videos', Videos);
 
         /* @ngInject */
-        function Videos($resource) {
+        function Videos(DS, DSCacheFactory, DSHttpAdapter) {
 
-            var Videos = $resource('https://api.mongolab.com/api/1/databases/sandbox/collections/videos/:id', {
-
-                // MongoLabs
-                apiKey: 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ',
-                id: '@_id.$oid'
+            var Videos = DS.defineResource({
+                name: 'Videos',
+                idAttribute: '_id',
+                endpoint: '/videos',
+                baseUrl: 'https://api.mongolab.com/api/1/databases/sandbox/collections',
 
             });
 

@@ -13,14 +13,14 @@
 	  	.controller('VideosCtrl', VideosCtrl);
 
     /* @ngInject */
-	function VideosCtrl(videos, $modal) {
+	function VideosCtrl($modal) {
 		/*jshint validthis: true */
         var vm = this;
-
+        console.log('controller')
         /*
             Resolved data, provided by the route
         */
-        vm.videos = videos;
+        //vm.videos = videos;
 
         // C in crud
         vm.create = create;

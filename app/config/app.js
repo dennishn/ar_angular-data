@@ -29,16 +29,8 @@
             'hj.gsapifyRouter',
             'mm.foundation',
             'ngMessages',
+            'angular-data.DS',
             'angular-data.DSCacheFactory'
 
-        ])
-        .run(['$http', 'DSCacheFactory', function($http, DSCacheFactory) {
-
-            DSCacheFactory('defaultCache', {
-                cacheFlushInterval: 600000,
-                storageMode: 'localStorage'
-            });
-
-            $http.defaults.cache = DSCacheFactory.get('defaultCache');
-        }]);
+        ]);
 })();

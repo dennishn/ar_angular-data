@@ -53,6 +53,11 @@
                 templateUrl: '503.html'
             });
 
+        // Hardcore MongoLabs API of doom
+        DSHttpAdapterProvider.defaults.queryTransform = function (resourceName, params) {
+            params.apiKey = 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ';
+            return params;
+        };
         DSHttpAdapterProvider.defaults.queryTransform = function (resourceName, params) {
             params.apiKey = 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ';
             return params;

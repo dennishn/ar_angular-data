@@ -3,24 +3,24 @@
 
     /**
      * @ngdoc route
-     * @name arAngularDataApp.route:videos
+     * @name arAngularDataApp.route:users
      * @function
      * @description
-     * # videos
+     * # users
      * Route in the arAngularDataApp.
      */
     angular.module('arAngularDataApp')
         /* @ngInject */
         .config(function ($stateProvider) {
 
-            var videos = {
-                name: 'videos',
-                url: '/videos',
-                templateUrl: 'modules/videos/videos.template.html',
-                controller: 'VideosCtrl',
-                controllerAs: 'videos',
+            var users = {
+                name: 'users',
+                url: '/users',
+                templateUrl: 'modules/users/users.template.html',
+                controller: 'UsersCtrl',
+                controllerAs: 'users',
                 resolve: {
-                    videos: function(Videos) {
+                    users: function(Users) {
 
                         /*
                             We have two options here
@@ -28,25 +28,25 @@
                             1: Return just the promise and let the controllers handle the resolve (Loads view quicker, but no data on-load)
 
                          */
-                        //var VideoPromise = Videos.query();
+                        //var VideoPromise = users.query();
                         //return VideoPromise.$promise;
 
                         /*
                             2: Return the data from the resolved promise (Loads view more slowly, but has data on-load)
                         */
-                        return Videos.findAll({}).then(function(result) {
-                            return result;
+                        return Users.findAll().then(function(users) {
+                            return users;
                         });
-                        //Videos.query().$promise.then(function(results) {
+                        //users.query().$promise.then(function(results) {
                         //    console.log(results);
                         //})
-                        //return Videos.query().$promise.then(function(results) {
+                        //return users.query().$promise.then(function(results) {
                         //    return results;
                         //});
                     }
                 }
             };
 
-            $stateProvider.state(videos);
+            $stateProvider.state(users);
         });
 })();

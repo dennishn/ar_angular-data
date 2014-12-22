@@ -10,14 +10,12 @@
 	 */
 	angular
 		.module('arAngularDataApp')
-	  	.controller('CreateVideo', CreateVideo);
+	  	.controller('CreateUser', CreateUser);
 
     /* @ngInject */
-	function CreateVideo($modalInstance, Videos) {
+	function CreateUser($modalInstance, Users) {
 		/*jshint validthis: true */
         var vm = this;
-
-        console.log(Videos)
 
         /*
             View Methods
@@ -55,10 +53,8 @@
              */
             vm.createForm.$pending = true;
 
-            var video = new Videos(vm.video);
-
-            video.$save().then(function(result) {
-                $modalInstance.close(result);
+            Users.create(vm.user).then(function(user) {
+                $modalInstance.close(user);
             });
 
         }

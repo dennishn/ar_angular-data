@@ -10,17 +10,17 @@
 	 */
 	angular
 		.module('arAngularDataApp')
-	  	.controller('VideosCtrl', VideosCtrl);
+	  	.controller('UsersCtrl', UsersCtrl);
 
     /* @ngInject */
-	function VideosCtrl($modal) {
+	function UsersCtrl(users, $modal) {
 		/*jshint validthis: true */
         var vm = this;
         console.log('controller')
         /*
             Resolved data, provided by the route
         */
-        //vm.videos = videos;
+        vm.users = users;
 
         // C in crud
         vm.create = create;
@@ -30,12 +30,12 @@
         function create() {
 
             var modalInstance = $modal.open({
-                templateUrl: 'modules/videos/create/create-video.template.html',
-                controller: 'CreateVideo as dialog',
+                templateUrl: 'modules/users/create/create-user.template.html',
+                controller: 'CreateUser as dialog',
                 windowClass: 'medium'
             });
 
-            modalInstance.result.then(function(video) {
+            modalInstance.result.then(function(user) {
                 //
             });
 

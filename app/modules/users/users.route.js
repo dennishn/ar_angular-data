@@ -16,37 +16,78 @@
             var users = {
                 name: 'users',
                 url: '/users',
-                templateUrl: 'modules/users/users.template.html',
-                controller: 'UsersCtrl',
-                controllerAs: 'users',
+                abstract: true,
+                views: {
+                    'main': {
+                        templateUrl: 'modules/users/users.template.html',
+                        controller: 'UsersCtrl',
+                        controllerAs: 'users'
+                    }
+                }
+            };
+
+            var list = {
+                name: 'users.list',
+                url: '',
+                views: {
+                    'content': {
+                        templateUrl: 'modules/users/list/list-users.template.html',
+                        controller: 'ListUsers',
+                        controllerAs: 'list'
+                    }
+                },
                 resolve: {
                     users: function(Users) {
-
                         /*
-                            We have two options here
-
-                            1: Return just the promise and let the controllers handle the resolve (Loads view quicker, but no data on-load)
-
+                         Return the data from the resolved promise (Loads view more slowly, but has data on-load)
                          */
-                        //var VideoPromise = users.query();
-                        //return VideoPromise.$promise;
-
-                        /*
-                            2: Return the data from the resolved promise (Loads view more slowly, but has data on-load)
-                        */
                         return Users.findAll().then(function(users) {
                             return users;
                         });
-                        //users.query().$promise.then(function(results) {
-                        //    console.log(results);
-                        //})
-                        //return users.query().$promise.then(function(results) {
-                        //    return results;
-                        //});
+                    }
+                }
+            };
+
+            var create = {
+                name: 'users.list.create',
+                url: '/create',
+                views: {
+                    'sidebar-right@users': {
+                        templateUrl: 'modules/users/create/create-user.template.html',
+                        controller: 'CreateUser',
+                        controllerAs: 'create'
+                    }
+                }
+            };
+
+            var single = {
+                name: 'users.single',
+                url: '/:id',
+                views: {
+                    'content': {
+                        templateUrl: 'modules/users/single/single-user.template.html',
+                        controller: 'User',
+                        controllerAs: 'user'
+                    }
+                },
+                resolve: {
+                    user: function($stateParams, Users) {
+                        /*
+                         Return the data from the resolved promise (Loads view more slowly, but has data on-load)
+                         */
+                        return Users.find($stateParams.id).then(function(user) {
+                            return user;
+                        });
+
                     }
                 }
             };
 
             $stateProvider.state(users);
+            $stateProvider.state(list);
+            $stateProvider.state(single);
+
+            $stateProvider.state(create);
+
         });
 })();

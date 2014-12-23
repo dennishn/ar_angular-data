@@ -41,7 +41,7 @@
         };
 
         $locationProvider.html5Mode(true);
-        $urlRouterProvider.otherwise('/404');
+        //$urlRouterProvider.otherwise('/404');
 
         $stateProvider
             .state('notfound', {
@@ -58,10 +58,12 @@
             params.apiKey = 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ';
             return params;
         };
-        DSHttpAdapterProvider.defaults.queryTransform = function (resourceName, params) {
-            params.apiKey = 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ';
-            return params;
-        };
+        angular.extend(DSHttpAdapterProvider.defaults.$httpConfig, {
+            params: {
+                apiKey: 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ'
+            }
+        });
+
     }
 
 })();

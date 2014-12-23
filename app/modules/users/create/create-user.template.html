@@ -1,63 +1,63 @@
-<h3>Create Video</h3>
+<h3>New User</h3>
 
-<form name="dialog.createForm" ng-submit="dialog.submit()" novalidate>
+<form name="create.createForm" ng-submit="create.submit()" novalidate>
     <div class="row">
         <div class="small-6 columns">
-            <label ng-class="{'error': dialog.hasError(dialog.createForm.userFirstName)}">
+            <label ng-class="{'error': create.hasError(create.createForm.userFirstName)}">
                 First Name
-                <input type="text" name="userFirstName" ng-model="dialog.user.first_name" ng-disabled="dialog.createForm.$pending" required />
+                <input type="text" name="userFirstName" ng-model="create.user.first_name" ng-disabled="create.createForm.$pending" required />
             </label>
 
-            <div ng-if="dialog.interacted(dialog.createForm.userFirstName)"
-                 ng-messages="dialog.createForm.userFirstName.$error"
+            <div ng-if="create.interacted(create.createForm.userFirstName)"
+                 ng-messages="create.createForm.userFirstName.$error"
                  ng-messages-multiple>
                 <small class="error" ng-message="required">
-                    The video title is required
+                    You must provide a first name
                 </small>
             </div>
         </div>
 
         <div class="small-6 columns">
-            <label ng-class="{'error': dialog.hasError(dialog.createForm.userLastName)}">
+            <label ng-class="{'error': create.hasError(create.createForm.userLastName)}">
                 Last Name
-                <input type="text" name="userLastName" ng-model="dialog.user.last_name" ng-disabled="dialog.createForm.$pending" required />
+                <input type="text" name="userLastName" ng-model="create.user.last_name" ng-disabled="create.createForm.$pending" required />
             </label>
 
-            <div ng-if="dialog.interacted(dialog.createForm.userLastName)"
-                 ng-messages="dialog.createForm.userLastName.$error"
+            <div ng-if="create.interacted(create.createForm.userLastName)"
+                 ng-messages="create.createForm.userLastName.$error"
                  ng-messages-multiple>
                 <small class="error" ng-message="required">
-                    The video title is required
+                    You must provide a last name
                 </small>
             </div>
         </div>
 
         <div class="small-12 columns">
-            <label ng-class="{'error': dialog.hasError(dialog.createForm.userAge)}">
+            <label ng-class="{'error': create.hasError(create.createForm.userAge)}">
                 Age
-                <input type="number" min="18" max="99" name="userAge" ng-model="dialog.user.age" ng-disabled="dialog.createForm.$pending" required />
+                <input type="number" min="18" max="99" name="userAge" ng-model="create.user.age" ng-disabled="create.createForm.$pending" required />
             </label>
 
-            <div ng-if="dialog.interacted(dialog.createForm.userAge)"
-                 ng-messages="dialog.createForm.userAge.$error"
+            <div ng-if="create.interacted(create.createForm.userAge)"
+                 ng-messages="create.createForm.userAge.$error"
                  ng-messages-multiple>
                 <small class="error" ng-message="required">
-                    The video title is required
+                    You must provide an age
                 </small>
             </div>
         </div>
 
         <div class="small-12 columns">
-            <label ng-class="{'error': dialog.hasError(dialog.createForm.userEmail)}">
+            <label ng-class="{'error': create.hasError(create.createForm.userEmail)}">
                 Email
-                <input type="email" name="userEmail" ng-model="dialog.user.email" ng-disabled="dialog.createForm.$pending" required />
+                <input type="email" name="userEmail" ng-model="create.user.email" ng-disabled="create.createForm.$pending" required />
             </label>
 
-            <div ng-if="dialog.interacted(dialog.createForm.userEmail)"
-                 ng-messages="dialog.createForm.userEmail.$error"
+            <div ng-if="create.interacted(create.createForm.userEmail)"
+                 ng-messages="create.createForm.userEmail.$error"
                  ng-messages-multiple>
                 <small class="error" ng-message="required">
-                    The video title is required
+                    You must provide an email
                 </small>
             </div>
         </div>
@@ -65,18 +65,16 @@
         <div class="small-12 columns">
             <label>
                 Company
-                <input type="text" name="userCompany" ng-model="dialog.user.company" ng-disabled="dialog.createForm.$pending" />
+                <input type="text" name="userCompany" ng-model="create.user.company" ng-disabled="create.createForm.$pending" />
             </label>
         </div>
 
         <div class="small-12 columns">
-            <button class="right success" type="submit" ng-disabled="dialog.createForm.$pending">
-                <span ng-hide="dialog.createForm.$pending">Save</span>
-                <span ng-show="dialog.createForm.$pending">Saving ...</span>
+            <button class="right success" type="submit" ng-disabled="create.createForm.$pending">
+                <span ng-hide="create.createForm.$pending">Save</span>
+                <span ng-show="create.createForm.$pending">Saving ...</span>
             </button>
+            <div class="button secondary" ng-click="create.cancel()">Cancel</div>
         </div>
     </div>
 </form>
-
-
-<a class="close-reveal-modal" ng-click="dialog.cancel()">&#215;</a>

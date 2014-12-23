@@ -3,25 +3,21 @@
 
 	/**
 	 * @ngdoc function
-	 * @name arAngularDataApp.controller:VideoCtrl
+	 * @name arAngularDataApp.controller:UserCtrl
 	 * @description
-	 * # VideoCtrl
+	 * # UserCtrl
 	 * Controller of the arAngularDataApp
 	 */
 	angular
 		.module('arAngularDataApp')
-	  	.controller('Video', Video);
+	  	.controller('User', User);
 
     /* @ngInject */
-	function Video() {
+	function User(user, Users) {
 		/*jshint validthis: true */
         var vm = this;
 
-        activate();
-
-        function activate() {
-
-        };
+        vm.user = user;
 	};
 
 })();

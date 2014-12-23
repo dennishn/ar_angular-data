@@ -1,0 +1,79 @@
+<h3>{{user.user.fullName()}}'s Profile:</h3>
+
+<form name="user.createForm" ng-submit="user.submit()" novalidate>
+    <div class="row">
+        <div class="small-6 columns">
+            <label ng-class="{'error': user.hasError(user.createForm.userFirstName)}">
+                First Name
+                <input type="text" name="userFirstName" ng-model="user.user.first_name" ng-disabled="user.createForm.$pending" required />
+            </label>
+
+            <div ng-if="user.interacted(user.createForm.userFirstName)"
+                 ng-messages="user.createForm.userFirstName.$error"
+                 ng-messages-multiple>
+                <small class="error" ng-message="required">
+                    The video title is required
+                </small>
+            </div>
+        </div>
+
+        <div class="small-6 columns">
+            <label ng-class="{'error': user.hasError(user.createForm.userLastName)}">
+                Last Name
+                <input type="text" name="userLastName" ng-model="user.user.last_name" ng-disabled="user.createForm.$pending" required />
+            </label>
+
+            <div ng-if="user.interacted(user.createForm.userLastName)"
+                 ng-messages="user.createForm.userLastName.$error"
+                 ng-messages-multiple>
+                <small class="error" ng-message="required">
+                    The video title is required
+                </small>
+            </div>
+        </div>
+
+        <div class="small-12 columns">
+            <label ng-class="{'error': user.hasError(user.createForm.userAge)}">
+                Age
+                <input type="number" min="18" max="99" name="userAge" ng-model="user.user.age" ng-disabled="user.createForm.$pending" required />
+            </label>
+
+            <div ng-if="user.interacted(user.createForm.userAge)"
+                 ng-messages="user.createForm.userAge.$error"
+                 ng-messages-multiple>
+                <small class="error" ng-message="required">
+                    The video title is required
+                </small>
+            </div>
+        </div>
+
+        <div class="small-12 columns">
+            <label ng-class="{'error': user.hasError(user.createForm.userEmail)}">
+                Email
+                <input type="email" name="userEmail" ng-model="user.user.email" ng-disabled="user.createForm.$pending" required />
+            </label>
+
+            <div ng-if="user.interacted(user.createForm.userEmail)"
+                 ng-messages="user.createForm.userEmail.$error"
+                 ng-messages-multiple>
+                <small class="error" ng-message="required">
+                    The video title is required
+                </small>
+            </div>
+        </div>
+
+        <div class="small-12 columns">
+            <label>
+                Company
+                <input type="text" name="userCompany" ng-model="user.user.company" ng-disabled="user.createForm.$pending" />
+            </label>
+        </div>
+
+        <div class="small-12 columns">
+            <button class="right success" type="submit" ng-disabled="user.createForm.$pending">
+                <span ng-hide="user.createForm.$pending">Save</span>
+                <span ng-show="user.createForm.$pending">Saving ...</span>
+            </button>
+        </div>
+    </div>
+</form>

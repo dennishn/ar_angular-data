@@ -1,0 +1,8 @@
+<h3>{{dialog.message.header}}</h3>
+
+<p>{{dialog.message.body}}</p>
+
+<button ng-class="dialog.message.context" class="right" ng-click="dialog.confirm()">Ok</button>
+<button class="secondary right" ng-click="dialog.cancel()">Cancel</button>
+
+<a class="close-reveal-modal" ng-click="dialog.cancel()">&#215;</a>

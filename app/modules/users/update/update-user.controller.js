@@ -10,13 +10,15 @@
 	 */
 	angular
 		.module('arAngularDataApp')
-	  	.controller('CreateUser', CreateUser);
+	  	.controller('UpdateUser', UpdateUser);
 
     /* @ngInject */
-	function CreateUser(Users, $state) {
+	function UpdateUser($modalInstance, user, Users) {
 		/*jshint validthis: true */
         var vm = this;
 
+        vm.user = user;
+        console.log(vm.user);
         /*
             View Methods
 
@@ -53,8 +55,8 @@
              */
             vm.createForm.$pending = true;
 
-            Users.create(vm.user).then(function(user) {
-                $state.go('users.list');
+            Users.update(vm.user._id.$oid, vm.user).then(function(user) {
+                $modalInstance.close(user);
             });
 
         }
@@ -72,7 +74,7 @@
         }
 
         function cancel() {
-            $state.go('users.list');
+            $modalInstance.dismiss();
         }
 
 	};

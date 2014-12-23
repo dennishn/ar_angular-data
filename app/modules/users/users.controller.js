@@ -13,35 +13,9 @@
 	  	.controller('UsersCtrl', UsersCtrl);
 
     /* @ngInject */
-	function UsersCtrl(users, $modal) {
+	function UsersCtrl() {
 		/*jshint validthis: true */
         var vm = this;
-        console.log('controller')
-        /*
-            Resolved data, provided by the route
-        */
-        vm.users = users;
-
-        // C in crud
-        vm.create = create;
-        // D in crud - 'delete' is reserved
-        //vm.remove = remove;
-
-        function create() {
-
-            var modalInstance = $modal.open({
-                templateUrl: 'modules/users/create/create-user.template.html',
-                controller: 'CreateUser as dialog',
-                windowClass: 'medium'
-            });
-
-            modalInstance.result.then(function(user) {
-                //
-            });
-
-        }
-
-
 
 
 	};

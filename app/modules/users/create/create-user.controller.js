@@ -72,7 +72,7 @@
         }
 
         function cancel() {
-            $state.go('users.list');
+            $state.go('parent.users.list');
         }
 
 	};

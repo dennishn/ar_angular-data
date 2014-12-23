@@ -14,9 +14,7 @@
     core.value('cgBusyDefaults', {
         message:'Loading Stuff',
         backdrop: true,
-        templateUrl: '../common/core/loadingindicator/loadingindicator.template.html',
-        delay: 300,
-        minDuration: 700
+        templateUrl: '../common/core/loadingindicator/loadingindicator.template.html'
     });
 
     core.config(configure);

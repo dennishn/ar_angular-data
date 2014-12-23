@@ -15,8 +15,6 @@
         /* @ngInject */
         function Users(DS, UUID) {
 
-            console.log(UUID)
-
             var Users = DS.defineResource({
                 name: 'Users',
                 idAttribute: 'id',

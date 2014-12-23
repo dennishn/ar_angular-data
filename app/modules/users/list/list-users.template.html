@@ -2,7 +2,7 @@
     <div class="small-12 medium-9 columns">
         <ul class="small-block-grid-2">
             <li ng-repeat="user in list.users">
-                <h4><a ui-sref="users.single({id: user._id.$oid})">{{user.fullName()}}</a></h4>
+                <h4><a ui-sref="parent.users.single({id: user._id.$oid})">{{user.fullName()}}</a></h4>
                 <p>{{user.email}}</p>
                 <button class="tiny expand" ng-click="list.update(user.id)">Edit</button>
                 <button class="tiny expand alert" ng-click="list.destroy(user.id)">Destroy</button>
@@ -13,7 +13,7 @@
     <div class="small-12 medium-3 columns">
         <ul class="side-nav">
             <li>
-                <a class="button success expand tiny" ui-sref="users.list.create">Create new User in a nested state</a>
+                <a class="button success expand tiny" ui-sref="parent.users.list.create">Create new User in a nested state</a>
             </li>
         </ul>
     </div>

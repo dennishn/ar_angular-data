@@ -16,14 +16,15 @@
           <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <div class="row">
-            <div class="small-12 columns">
-                <h1>Web Application Concepts in AngularJS <small>By @dennishn</small></h1>
-            </div>
-        </div>
+        <!-- Navigation -->
+        <div ui-view="navigation"></div>
 
-        <!-- Application Entry: -->
-        <div ui-view="main" class="gsapify-router"></div>
+        <div class="row">
+
+            <!-- Main View -->
+            <div ui-view="main"></div>
+
+        </div>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
         <script>
@@ -105,6 +106,15 @@
 
         <script src="common/ui/dialog/confirm/confirm.module.js"></script>
         <script src="common/ui/dialog/confirm/confirm.controller.js"></script>
+        <script src="modules/parent/parent.module.js"></script>
+        <script src="modules/parent/parent.route.js"></script>
+        <script src="modules/parent/parent.controller.js"></script>
+        <script src="modules/landing-page/landing-page.module.js"></script>
+        <script src="modules/landing-page/landing-page.route.js"></script>
+        <script src="modules/landing-page/landing-page.controller.js"></script>
+        <script src="modules/navigation/navigation.module.js"></script>
+        <script src="modules/navigation/navigation.route.js"></script>
+        <script src="modules/navigation/navigation.controller.js"></script>
         <!-- endbuild -->
     </body>
 </html>

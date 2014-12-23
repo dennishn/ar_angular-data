@@ -14,11 +14,11 @@
         .config(function ($stateProvider) {
 
             var users = {
-                name: 'users',
+                name: 'parent.users',
                 url: '/users',
                 abstract: true,
                 views: {
-                    'main': {
+                    'content': {
                         templateUrl: 'modules/users/users.template.html',
                         controller: 'UsersCtrl',
                         controllerAs: 'users'
@@ -27,10 +27,10 @@
             };
 
             var list = {
-                name: 'users.list',
+                name: 'parent.users.list',
                 url: '',
                 views: {
-                    'content': {
+                    'content@parent': {
                         templateUrl: 'modules/users/list/list-users.template.html',
                         controller: 'ListUsers',
                         controllerAs: 'list'
@@ -49,10 +49,10 @@
             };
 
             var create = {
-                name: 'users.list.create',
+                name: 'parent.users.list.create',
                 url: '/create',
                 views: {
-                    'sidebar-right@users': {
+                    'sidebar-right@parent': {
                         templateUrl: 'modules/users/create/create-user.template.html',
                         controller: 'CreateUser',
                         controllerAs: 'create'
@@ -61,10 +61,10 @@
             };
 
             var single = {
-                name: 'users.single',
+                name: 'parent.users.single',
                 url: '/:id',
                 views: {
-                    'content': {
+                    'content@parent': {
                         templateUrl: 'modules/users/single/single-user.template.html',
                         controller: 'User',
                         controllerAs: 'user'

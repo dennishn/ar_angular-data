@@ -41,7 +41,7 @@
                         /*
                          Return the data from the resolved promise (Loads view more slowly, but has data on-load)
                          */
-                        return Users.findAll().then(function(users) {
+                        return Users.query().then(function(users) {
                             return users;
                         });
                     }
@@ -71,15 +71,15 @@
                     }
                 },
                 resolve: {
-                    user: function($stateParams, Users) {
-                        /*
-                         Return the data from the resolved promise (Loads view more slowly, but has data on-load)
-                         */
-                        return Users.find($stateParams.id).then(function(user) {
-                            return user;
-                        });
-
-                    }
+                    /*
+                     In order to show an example of loading, following code is disabled.
+                     Refer to singe-user.controller.js instead.
+                     */
+                    //user: function($stateParams, Users) {
+                    //    return Users.get($stateParams.id).then(function(user) {
+                    //        return user;
+                    //    });
+                    //}
                 }
             };
 

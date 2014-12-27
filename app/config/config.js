@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var core = angular.module('config', ['core.exception', 'core.logger', 'angular-loading-bar', 'cgBusy', 'hj.gsapifyRouter', 'angular-data.DS', 'angular-data.DSCacheFactory']);
+    var core = angular.module('config', ['core.exception', 'core.logger', 'angular-loading-bar', 'cgBusy', 'hj.gsapifyRouter']);
 
     var config = {
         appErrorPrefix: '[NG-Modular Error] ', //Configure the exceptionHandler decorator,
@@ -20,7 +20,7 @@
     core.config(configure);
 
     /* @ngInject */
-    function configure($logProvider, exceptionHandlerProvider, $stateProvider, $urlRouterProvider, $locationProvider, cfpLoadingBarProvider, gsapifyRouterProvider, APP_ENV, DSHttpAdapterProvider, DSCacheFactoryProvider) {
+    function configure($logProvider, exceptionHandlerProvider, $stateProvider, $urlRouterProvider, $locationProvider, cfpLoadingBarProvider, gsapifyRouterProvider, APP_ENV) {
 
         if($logProvider.debugEnabled && APP_ENV === 'development') {
             $logProvider.debugEnabled(true);
@@ -52,15 +52,25 @@
             });
 
         // Hardcore MongoLabs API of doom
-        DSHttpAdapterProvider.defaults.queryTransform = function (resourceName, params) {
-            params.apiKey = 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ';
-            return params;
-        };
-        angular.extend(DSHttpAdapterProvider.defaults.$httpConfig, {
-            params: {
-                apiKey: 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ'
-            }
-        });
+        //DSHttpAdapterProvider.defaults.basePath = 'https://api.mongolab.com/api/1/databases/sandbox/collections';
+        //DSHttpAdapterProvider.defaults.queryTransform = function (resourceName, params) {
+        //    params.apiKey = 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ';
+        //    return params;
+        //};
+        //angular.extend(DSHttpAdapterProvider.defaults.$httpConfig, {
+        //    params: {
+        //        apiKey: 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ'
+        //    }
+        //});
+        //
+        //// Global Cache Settings
+        //DSCacheFactoryProvider.setCacheDefaults({
+        //    maxAge: 6000,
+        //    deleteOnExpire: 'aggressive',
+        //    onExpire: function(key, value) {
+        //        console.log('Global Cache Expire: ', key, value);
+        //    }
+        //});
 
     }
 

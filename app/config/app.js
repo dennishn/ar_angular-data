@@ -29,8 +29,8 @@
             'hj.gsapifyRouter',
             'mm.foundation',
             'ngMessages',
-            'angular-data.DS',
-            'angular-data.DSCacheFactory'
+
+            // Data Stores & Caching
 
         ]);
 })();

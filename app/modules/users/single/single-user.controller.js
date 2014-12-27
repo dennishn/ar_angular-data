@@ -18,21 +18,17 @@
         var vm = this;
 
         /*
-        To help simulate long loading time, we force the resource to bypass fetching from the cache,
-        and force it not to store the response in the cache.
+        To show, how resolving in data looks like, we have chosen not to resolve the data in the route.
+        Instead we query the data when our view is loaded.
         We also tell our "global loading bar" not to track this API call (2 loading indicators is ugh!)
          */
-        vm.loadingPromise = Users.find($stateParams.id, {
-            bypassCache: true,
-            cacheResponse: false,
+        vm.loadingPromise = Users.get($stateParams.id, {
             ignoreLoadingBar: true
         });
 
         vm.loadingPromise.then(function(user) {
             vm.user = user;
         });
-
-        //vm.user = user;
 
         // U in crud
         vm.update = update;

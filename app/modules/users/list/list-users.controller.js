@@ -13,9 +13,10 @@
 	  	.controller('ListUsers', ListUsers);
 
     /* @ngInject */
-	function ListUsers(Users, $modal, DS, $scope) {
+	function ListUsers(users, $modal, $scope) {
 		/*jshint validthis: true */
         var vm = this;
+        vm.users = users;
 
         /*
          Even though we resolve the Users data on the load, we should still make sure keep our view-model in "sync".
@@ -24,9 +25,9 @@
          Watching attributes always requires injecting $scope in to the controller. This is intended behavior.
          */
         $scope.$watch(function() {
-            return DS.lastModified('Users');
+            //return DS.lastModified('Users');
         }, function(value) {
-            vm.users = DS.filter('Users');
+            //vm.users = DS.filter('Users');
         });
 
 

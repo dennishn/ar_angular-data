@@ -38,10 +38,12 @@
                 },
                 resolve: {
                     users: function(Users) {
+                        console.log(Users);
                         /*
                          Return the data from the resolved promise (Loads view more slowly, but has data on-load)
                          */
                         return Users.query().then(function(users) {
+                            console.log(users)
                             return users;
                         });
                     }

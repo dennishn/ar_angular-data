@@ -13,7 +13,7 @@
 	  	.controller('ListUsers', ListUsers);
 
     /* @ngInject */
-	function ListUsers(users, $modal, $scope) {
+	function ListUsers(users, Users, $modal, $scope) {
 		/*jshint validthis: true */
         var vm = this;
         vm.users = users;
@@ -25,8 +25,10 @@
          Watching attributes always requires injecting $scope in to the controller. This is intended behavior.
          */
         $scope.$watch(function() {
+            return Users.collection;
             //return DS.lastModified('Users');
         }, function(value) {
+            console.log(value)
             //vm.users = DS.filter('Users');
         });
 
@@ -73,7 +75,7 @@
             });
 
             modalInstance.result.then(function() {
-                Users.destroy(id);
+                Users.remove(id);
             });
         }
 

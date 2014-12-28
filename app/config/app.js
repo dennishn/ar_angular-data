@@ -22,6 +22,7 @@
             'config',
             'core.exception',
             'core.logger',
+            'lodashAngularWrapper',
             'angular-loading-bar',
             'cgBusy',
             'angulartics',

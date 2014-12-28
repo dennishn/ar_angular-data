@@ -33,8 +33,6 @@
         // validation flag
         vm.formSubmitted = false;
 
-        //
-
         function submit() {
             vm.formSubmitted = true;
 
@@ -53,8 +51,8 @@
              */
             vm.createForm.$pending = true;
 
-            Users.create(vm.user).then(function(user) {
-                $state.go('users.list');
+            Users.save(vm.user).then(function(user) {
+                $state.transitionTo('parent.users.list', {}, {reload: true});
             });
 
         }

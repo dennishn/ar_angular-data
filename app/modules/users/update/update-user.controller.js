@@ -55,7 +55,7 @@
              */
             vm.createForm.$pending = true;
 
-            Users.update(vm.user._id.$oid, vm.user).then(function(user) {
+            Users.save(vm.user).then(function(user) {
                 $modalInstance.close(user);
             });
 

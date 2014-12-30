@@ -32,6 +32,6 @@
             'ngMessages',
 
             // Data Stores & Caching
-
+            'LocalForageModule'
         ]);
 })();

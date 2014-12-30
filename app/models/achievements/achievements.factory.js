@@ -3,17 +3,17 @@
 
     /**
      * @ngdoc function
-     * @name arAngularDataApp.factory:Videos
+     * @name arAngularDataApp.factory:Achievements
      * @description
      * # Videos
      * Factory of the arAngularDataApp
      */
     angular
         .module('arAngularDataApp')
-        .factory('Users', Users);
+        .factory('Achievements', Achievements);
 
         /* @ngInject */
-        function Users($resource, $cacheFactory, $q, _, logger, User) {
+        function Achievements($resource, $localForage, $q, _, logger, Achievement, $rootScope) {
 
             var service = {
                 // Return collection [cRud]
@@ -25,17 +25,23 @@
                 // Delete single model
                 remove: remove,
                 // Client side collection (for caching, client-side storage etc.)
-                collection: []
+                collection: [],
+                offlineCollection: []
             };
 
 
             /*
-                Each data-collection should have it's own cache entry.
-                This makes it easier to adapt for non-memory caches (IndexDB, LocalStorage, Session).
-                usage: $cacheFactory(id, number(LRU cache))
-                docs: https://docs.angularjs.org/api/ng/service/$cacheFactory
+
              */
-            var cache = $cacheFactory('Users');
+            var cache = $localForage.createInstance({
+                name: 'Achievements'
+            });
+
+            $rootScope.$on('navigatorOffline', function() {
+                alert('hahaha from le factory');
+            });
+
+            console.log($localForage.instance('Achievements'));
 
 
             /*
@@ -43,7 +49,7 @@
                 usage: $resource(url, default parameters, actions, options(dont bother with this) )
                 docs: https://docs.angularjs.org/api/ngResource/service/$resource
              */
-            var resource = $resource('https://api.mongolab.com/api/1/databases/sandbox/collections/users/:id',
+            var resource = $resource('https://api.mongolab.com/api/1/databases/sandbox/collections/achievements/:id',
                 // MongoLabs requires an API key in ALL api communcation, we
                 {
                     apiKey: 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ'
@@ -51,12 +57,12 @@
                 {
                     'query': {
                         method: 'GET',
-                        cache: cache,
+                        //cache: cache,
                         isArray: true
                     },
                     'get': {
                         method: 'GET',
-                        cache: cache
+                        //cache: cache
                     },
                     'save': {
                         method: 'POST'
@@ -77,7 +83,7 @@
             /**
              * @ngdoc method
              * @name query
-             * @requires $cacheFactory, $resource, lo-dash, $q, User
+             * @requires $cacheFactory, $resource, lo-dash, $q, Achievement
              * @param {object} params
              * @returns {Promise} The newly created promise
              *
@@ -87,7 +93,7 @@
              *
              * When data is received, it is compared to the current collection.
              * If a match is found, the item is updates.
-             * If a match is not found, a User is constructed with the User factory.
+             * If a match is not found, a Achievement is constructed with the Achievement factory.
              * Lastly, the cache item gets put or created.
              */
             function query(params) {
@@ -96,35 +102,65 @@
 
                 var deferred = $q.defer();
 
-                resource.query(params).$promise.then(function(results) {
+                if($rootScope.isOnline) {
 
-                    _.each(results, function(model) {
+                    resource.query(params).$promise.then(function(results) {
 
-                        var existingModel = _.find(service.collection, function(item) {
-                            return item._id.$oid == model._id.$oid;
+                        _.each(results, function(model) {
+
+                            var existingModel = _.find(service.collection, function(item) {
+                                return item._id.$oid == model._id.$oid;
+                            });
+
+                            if(existingModel) {
+
+                                angular.extend(existingModel, model);
+
+                                cache.setItem(existingModel._id.$oid, model);
+
+                            } else {
+
+                                var newAchievement = new Achievement(model);
+
+                                service.collection.push(newAchievement);
+
+                                cache.setItem(model._id.$oid, model);
+
+                            }
+
                         });
 
-                        if(existingModel) {
-
-                            angular.extend(existingModel, model);
-
-                            cache.put(existingModel._id.$oid, existingModel);
-
-                        } else {
-
-                            var newUser = new User(model);
-
-                            service.collection.push(newUser);
-
-                            cache.put(newUser._id.$oid, newUser);
-
-                        }
+                        deferred.resolve(service.collection);
 
                     });
 
-                    deferred.resolve(service.collection);
+                } else {
 
-                });
+                    cache.keys().then(function(achievements) {
+
+                        var promises = achievements.map(function (item) {
+
+                            return cache.getItem(item);
+
+                        });
+
+                        $q.all(promises).then(function(results) {
+
+                            _.each(results, function(model) {
+
+                                var newAchievement = new Achievement(model);
+
+                                service.collection.push(newAchievement);
+
+                            });
+
+                            deferred.resolve(service.collection);
+
+                        });
+
+                    });
+
+                }
 
                 return deferred.promise;
 
@@ -133,7 +169,7 @@
             /**
              * @ngdoc method
              * @name get
-             * @requires $cacheFactory, $resource, lo-dash, $q, User
+             * @requires $cacheFactory, $resource, lo-dash, $q, Achievement
              * @param {object} params
              * @returns {Promise} The newly created promise
              *
@@ -144,7 +180,7 @@
              * When data is received, it is compared to the current collection
              * If an item already exists in the internal collection,
              * the item gets the returned data merged into it.
-             * If the item does not exist, a User is constructed with the User factory.
+             * If the item does not exist, a Achievement is constructed with the Achievement factory.
              * Lastly, the cache item gets put or created.
              */
             function get(params) {
@@ -163,19 +199,19 @@
 
                         angular.extend(existingModel, model);
 
-                        cache.put(existingModel._id.$oid, existingModel);
+                        //cache.put(existingModel._id.$oid, existingModel);
 
                         deferred.resolve(existingModel);
 
                     } else {
 
-                        var newUser = new User(model);
+                        var newAchievement = new Achievement(model);
 
-                        service.collection.push(newUser);
+                        service.collection.push(newAchievement);
 
-                        cache.put(newUser._id.$oid, newUser);
+                        //cache.put(newAchievement._id.$oid, newAchievement);
 
-                        deferred.resolve(newUser);
+                        deferred.resolve(newAchievement);
 
                     }
 
@@ -188,7 +224,7 @@
             /**
              * @ngdoc method
              * @name save
-             * @requires $cacheFactory, $resource, lo-dash, $q, User
+             * @requires $cacheFactory, $resource, lo-dash, $q, Achievement
              * @param {object} model
              * @returns {Promise} The newly created promise
              *
@@ -201,7 +237,7 @@
              * If the item already exists,
              * the response gets merged into this item and is added to the collection
              *
-             * If the item does not exist, a User is constructed with the User factory,
+             * If the item does not exist, a Achievement is constructed with the Achievement factory,
              * and is merged with the response.
              * This is done because MongoLabs adds the primary key upon creation,
              * and this key is needed later on for updating and identifying this resource.
@@ -226,35 +262,58 @@
 
                     } else {
 
-                        resource.update({id: model._id.$oid}).$promise.then(function(model) {
+                        if($rootScope.isOnline) {
 
-                            var item = _.find(service.collection, function(item) {
-                                return item._id.$oid == model._id.$oid;
+                            resource.update({id: model._id.$oid}).$promise.then(function(model) {
+
+                                var item = _.find(service.collection, function(item) {
+                                    return item._id.$oid == model._id.$oid;
+                                });
+
+                                angular.extend(item, model);
+
+                                //cache.put(item._id.$oid, item);
+
+                                deferred.resolve(item);
+
                             });
 
-                            angular.extend(item, model);
+                        } else {
 
-                            cache.put(item._id.$oid, item);
 
-                            deferred.resolve(item);
 
-                        });
-
+                        }
                     }
+
+
+
 
                 } else {
 
-                    resource.save(model).$promise.then(function(model) {
+                    console.log($rootScope.isOnline);
 
-                        var newUser = new User(model);
+                    if($rootScope.isOnline) {
 
-                        service.collection.push(newUser);
+                        resource.save(model).$promise.then(function(model) {
 
-                        cache.put(newUser._id.$oid, newUser);
+                            var newAchievement = new Achievement(model);
 
-                        deferred.resolve(newUser);
+                            service.collection.push(newAchievement);
 
-                    });
+                            cache.setItem(model._id.$oid, model);
+
+                            deferred.resolve(newAchievement);
+
+                        });
+
+                    } else {
+
+                        cache.setItem(model._id.$oid, model).then(function() {
+                            service.offlineCollection.push(model);
+                            service.collection.push(model);
+                        });
+
+                    }
 
                 }
 
@@ -265,7 +324,7 @@
             /**
              * @ngdoc method
              * @name save
-             * @requires $cacheFactory, $resource, lo-dash, $q, User
+             * @requires $cacheFactory, $resource, lo-dash, $q, Achievement
              * @param {object} model
              * @returns {Promise} The newly created promise
              *
@@ -298,7 +357,7 @@
                             return _id._id.$oid == id;
                         });
 
-                        cache.remove(id);
+                        //cache.remove(id);
 
                         deferred.resolve(service.collection);
 

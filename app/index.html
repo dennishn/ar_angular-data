@@ -73,11 +73,14 @@
         <script src="bower_components/angular-messages/angular-messages.js"></script>
         <script src="bower_components/lodash/dist/lodash.compat.js"></script>
         <script src="bower_components/lodash-angular-wrapper/lodash-angular-wrapper.js"></script>
+        <script src="bower_components/localforage/dist/localforage.js"></script>
+        <script src="bower_components/angular-localforage/dist/angular-localForage.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="config/app.js"></script>
+        <script src="config/run.js"></script>
         <script src="config/config.js"></script>
         <script src="config/enviroment.js"></script>
         <script src="common/core/exception/exception.module.js"></script>
@@ -90,7 +93,9 @@
         <script src="modules/users/users.module.js"></script>
         <script src="modules/users/users.route.js"></script>
         <script src="modules/users/users.controller.js"></script>
+
         <script src="models/users/users.factory.js"></script>
+        <script src="models/users/user.factory.js"></script>
 
         <script src="modules/users/list/list-users.module.js"></script>
         <script src="modules/users/list/list-users.controller.js"></script>
@@ -106,16 +111,29 @@
 
         <script src="common/ui/dialog/confirm/confirm.module.js"></script>
         <script src="common/ui/dialog/confirm/confirm.controller.js"></script>
+
         <script src="modules/parent/parent.module.js"></script>
         <script src="modules/parent/parent.route.js"></script>
         <script src="modules/parent/parent.controller.js"></script>
+
         <script src="modules/landing-page/landing-page.module.js"></script>
         <script src="modules/landing-page/landing-page.route.js"></script>
         <script src="modules/landing-page/landing-page.controller.js"></script>
+
         <script src="modules/navigation/navigation.module.js"></script>
         <script src="modules/navigation/navigation.route.js"></script>
         <script src="modules/navigation/navigation.controller.js"></script>
-        <script src="models/users/user.factory.js"></script>
+
+        <script src="modules/achievements/achievements.module.js"></script>
+        <script src="modules/achievements/achievements.route.js"></script>
+        <script src="modules/achievements/achievements.controller.js"></script>
+
+        <script src="modules/achievements/list/list-achievements.module.js"></script>
+        <script src="modules/achievements/list/list-achievements.controller.js"></script>
+
+        <script src="models/achievements/achievement.factory.js"></script>
+        <script src="models/achievements/achievements.factory.js"></script>
+
         <!-- endbuild -->
     </body>
 </html>

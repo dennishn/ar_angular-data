@@ -294,19 +294,8 @@
 
                     resource.remove({id: id}).$promise.then(function() {
 
-                        /*
-
-
-
-
-                                SIDDER FAST HER :-)
-
-
-
-
-                         */
                         _.remove(service.collection, function(_id) {
-                            return _id == id;
+                            return _id._id.$oid == id;
                         });
 
                         cache.remove(id);

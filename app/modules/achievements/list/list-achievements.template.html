@@ -1,0 +1,36 @@
+<div class="row">
+    <div class="small-12 columns">
+
+        <form name="list.createForm" ng-submit="list.createAchievement()">
+            <div class="row">
+                <div class="small-6 columns">
+                    <label>
+                        Name
+                        <input type="text" name="achievementName" ng-model="list.achievement.name" ng-disabled="list.createForm.$pending" required />
+                    </label>
+                </div>
+                <div class="small-3 columns">
+                    <label>
+                        Points
+                        <input type="number" name="achievementPoints" ng-model="list.achievement.points" ng-disabled="list.createForm.$pending" required />
+                    </label>
+                </div>
+                <div class="small-3 columns">
+                    <button class="success expand" type="submit" ng-disabled="list.createForm.$pending">
+                        <span ng-hide="list.createForm.$pending">Save</span>
+                        <span ng-show="list.createForm.$pending">Saving ...</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <div class="small-12 columns">
+        <ul class="small-block-grid-2">
+            <li ng-repeat="achievement in list.achievements">
+                <p>{{achievement.name}}</p>
+                <p>{{achievement.points}}</p>
+            </li>
+        </ul>
+    </div>
+</div>

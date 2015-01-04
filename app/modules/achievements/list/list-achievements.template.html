@@ -30,6 +30,8 @@
             <li ng-repeat="achievement in list.achievements">
                 <p>{{achievement.name}}</p>
                 <p>{{achievement.points}}</p>
+                <button ng-click="list.editAchievement(achievement)">edit</button>
+                <button class="alert" ng-click="list.removeAchievement(achievement)">delete</button>
             </li>
         </ul>
     </div>

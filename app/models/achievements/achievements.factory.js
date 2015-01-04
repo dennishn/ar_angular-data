@@ -15,6 +15,9 @@
         /* @ngInject */
         function Achievements($resource, $localForage, $q, _, logger, Achievement, $rootScope) {
 
+            var _inSync = false;
+            var _expires = 10000;
+
             var service = {
                 // Return collection [cRud]
                 query: query,
@@ -25,16 +28,14 @@
                 // Delete single model
                 remove: remove,
                 // Client side collection (for caching, client-side storage etc.)
-                collection: [],
-                offlineCollection: []
+                collection: []
             };
-
 
             /*
 
              */
             var cache = $localForage.createInstance({
-                name: 'Achievements'
+                name: 'achievements'
             });
 
             /*
@@ -48,133 +49,143 @@
                     apiKey: 'ztditW8VtqvTMRyV6jdQzWb0i_8WBJgJ'
                 },
                 {
-                    'query': {
-                        method: 'GET',
-                        //cache: cache,
-                        isArray: true
-                    },
-                    'get': {
-                        method: 'GET',
-                        //cache: cache
-                    },
-                    'save': {
-                        method: 'POST'
-                    },
                     // Add PUT method since it's not available by default
                     'update': {
                         method: 'PUT',
                         params: {
                             id: '@id'
                         }
-                    },
-                    'remove': {
-                        method: 'DELETE'
                     }
                 }
             );
 
-            /**
-             * @ngdoc method
-             * @name query
-             * @requires $cacheFactory, $resource, lo-dash, $q, Achievement
-             * @param {object} params
-             * @returns {Promise} The newly created promise
-             *
-             * @description
-             * Queries a given endpoint defined in resource.
-             * The endpoint must return an array of objects.
-             *
-             * When data is received, it is compared to the current collection.
-             * If a match is found, the item is updates.
-             * If a match is not found, a Achievement is constructed with the Achievement factory.
-             * Lastly, the cache item gets put or created.
-             */
             function query(params) {
 
                 params = params || {};
 
                 var deferred = $q.defer();
 
-                resource.query(params).$promise.then(function(results) {
+                $q.when(cache.getItem('lastModified')).then(function(lastModified) {
 
-                    _.each(results, function(model) {
+                    if((Date.now() - lastModified) < _expires) {
 
-                        var existingModel = _.find(service.collection, function(item) {
-                            return item._id.$oid == model._id.$oid;
+                        var promises = [];
+
+                        cache.getKeys().then(function(keys) {
+
+                            _.each(keys, function(key) {
+                                if(key != 'lastModified') {
+                                    promises.push(cache.getItem(key));
+                                }
+                            });
+
+                            $q.all(promises).then(function(results) {
+
+                                service.collection = results;
+
+                                deferred.resolve(service.collection);
+
+                            });
+
+                        })
+
+                    } else {
+
+                        resource.query(params).$promise.then(function(results) {
+
+                            _.each(results, function(model) {
+
+                                var existingModel = _.find(service.collection, function(item) {
+                                    return item._id.$oid == model._id.$oid;
+                                });
+
+                                if(existingModel) {
+
+                                    angular.extend(existingModel, model);
+
+                                    cache.setItem(existingModel._id.$oid, model);
+
+                                } else {
+
+                                    var newAchievement = new Achievement(model);
+
+                                    service.collection.push(newAchievement);
+
+                                    cache.setItem(model._id.$oid, model);
+
+                                }
+
+                            });
+
+                            cache.setItem('lastModified', Date.now()).then(function(result) {
+
+                                deferred.resolve(service.collection);
+
+                            });
+
                         });
 
-                        if(existingModel) {
-
-                            angular.extend(existingModel, model);
-
-                            cache.setItem(existingModel._id.$oid, model);
-
-                        } else {
-
-                            var newAchievement = new Achievement(model);
-
-                            service.collection.push(newAchievement);
-
-                            cache.setItem(model._id.$oid, model);
-
-                        }
-
-                    });
-
-                    deferred.resolve(service.collection);
+                    }
 
                 });
+
+
 
                 return deferred.promise;
 
             }
 
-            /**
-             * @ngdoc method
-             * @name get
-             * @requires $cacheFactory, $resource, lo-dash, $q, Achievement
-             * @param {object} params
-             * @returns {Promise} The newly created promise
-             *
-             * @description
-             * Queries a given endpoint defined in resource.
-             * The endpoint must return an object.
-             *
-             * When data is received, it is compared to the current collection
-             * If an item already exists in the internal collection,
-             * the item gets the returned data merged into it.
-             * If the item does not exist, a Achievement is constructed with the Achievement factory.
-             * Lastly, the cache item gets put or created.
-             */
             function get(params) {
 
                 params = (typeof params == 'string') ? {id: params} : params;
 
                 var deferred = $q.defer();
 
-                resource.get(params).$promise.then(function(model) {
+                $q.when(cache.getItem('lastModified')).then(function(lastModified) {
 
-                    var existingModel = _.find(service.collection, function(item) {
-                        return item._id.$oid == model._id.$oid;
-                    });
+                    if((Date.now() - lastModified) < _expires) {
 
-                    if(existingModel) {
+                        cache.getItem(params).then(function(model) {
 
-                        angular.extend(existingModel, model);
+                            var existingModel = _.find(service.collection, function(item) {
+                                return item._id.$oid == model._id.$oid;
+                            });
 
-                        //cache.put(existingModel._id.$oid, existingModel);
+                            angular.extend(existingModel, model);
 
-                        deferred.resolve(existingModel);
+                            deferred.resolve(existingModel);
+
+                        });
 
                     } else {
 
-                        var newAchievement = new Achievement(model);
+                        resource.get(params).$promise.then(function(model) {
 
-                        service.collection.push(newAchievement);
+                            var existingModel = _.find(service.collection, function(item) {
+                                return item._id.$oid == model._id.$oid;
+                            });
 
-                        //cache.put(newAchievement._id.$oid, newAchievement);
+                            if(existingModel) {
 
-                        deferred.resolve(newAchievement);
+                                angular.extend(existingModel, model);
+
+                                cache.setItem(existingModel._id.$oid, model);
+
+                                deferred.resolve(existingModel);
+
+                            } else {
+
+                                var newAchievement = new Achievement(model);
+
+                                service.collection.push(newAchievement);
+
+                                cache.setItem(model._id.$oid, model);
+
+                                deferred.resolve(newAchievement);
+
+                            }
+
+                        });
 
                     }
 
@@ -184,28 +195,6 @@
 
             }
 
-            /**
-             * @ngdoc method
-             * @name save
-             * @requires $cacheFactory, $resource, lo-dash, $q, Achievement
-             * @param {object} model
-             * @returns {Promise} The newly created promise
-             *
-             * @description
-             * If the model parameter contains the primary key: _id.$oid
-             * the item is sent to the database by PUT.
-             * If the model parameter does not container the primary key: _id.$oid
-             * the item is sent to the database by POST.
-             *
-             * If the item already exists,
-             * the response gets merged into this item and is added to the collection
-             *
-             * If the item does not exist, a Achievement is constructed with the Achievement factory,
-             * and is merged with the response.
-             * This is done because MongoLabs adds the primary key upon creation,
-             * and this key is needed later on for updating and identifying this resource.
-             * Lastly, the cache item gets put or created.
-             */
             function save(model) {
 
                 var deferred = $q.defer();
@@ -225,17 +214,17 @@
 
                     } else {
 
-                        resource.update({id: model._id.$oid}).$promise.then(function(model) {
+                        resource.update(model).$promise.then(function(model) {
 
-                            var item = _.find(service.collection, function(item) {
+                            var existingModel = _.find(service.collection, function(item) {
                                 return item._id.$oid == model._id.$oid;
                             });
 
-                            angular.extend(item, model);
+                            angular.extend(existingModel, model);
 
-                            //cache.put(item._id.$oid, item);
+                            cache.setItem(existingModel._id.$oid, model);
 
-                            deferred.resolve(item);
+                            deferred.resolve(existingModel);
 
                         });
 
@@ -261,47 +250,37 @@
 
             }
 
-            /**
-             * @ngdoc method
-             * @name save
-             * @requires $cacheFactory, $resource, lo-dash, $q, Achievement
-             * @param {object} model
-             * @returns {Promise} The newly created promise
-             *
-             * @description
-             * Deletes a given resource.
-             *
-             * When the item has been deleted remotely, it is removed from the cache
-             * and from the internal collection.
-             */
-            function remove(id) {
+            function remove(model) {
 
                 var deferred = $q.defer();
 
-                if(!id) {
+                if(model._id) {
 
-                    var error = {
-                        message: 'Missing $oid!',
-                        title: 'Model ID Error'
-                    };
+                    if(!model._id.$oid) {
+                        var error = {
+                            message: 'Missing $oid!',
+                            title: 'Model ID Error'
+                        };
 
-                    logger.error(error.message, null, error.title);
+                        logger.error(error.message, null, error.title);
 
-                    deferred.reject(error.message);
+                        deferred.reject(error.message);
 
-                } else {
+                    } else {
 
-                    resource.remove({id: id}).$promise.then(function() {
+                        resource.remove({id: model._id.$oid}).$promise.then(function() {
 
-                        _.remove(service.collection, function(_id) {
-                            return _id._id.$oid == id;
+                            _.remove(service.collection, function(item) {
+                                return item._id.$oid == model._id.$oid;
+                            });
+
+                            cache.removeItem(model._id.$oid);
+
+                            deferred.resolve(service.collection);
+
                         });
 
-                        //cache.remove(id);
-
-                        deferred.resolve(service.collection);
-
-                    });
+                    }
 
                 }
 

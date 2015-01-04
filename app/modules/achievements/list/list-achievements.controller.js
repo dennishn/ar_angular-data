@@ -20,13 +20,29 @@
         vm.achievements = achievements;
 
         vm.createAchievement = createAchievement;
+        vm.editAchievement = editAchievement;
+        vm.removeAchievement = removeAchievement;
 
         function createAchievement() {
             vm.createForm.$pending = true;
 
-            Achievements.save(vm.achievement).then(function(achievement) {
+            Achievements.save(vm.achievement).then(function() {
                 vm.createForm.$pending = false;
             });
+        }
+
+        function editAchievement(achievement) {
+
+            vm.achievement = achievement;
+
+        }
+
+        function removeAchievement(achievement) {
+
+            console.log(achievement);
+
+            Achievements.remove(achievement);
+
         }
 
 
